@@ -1,6 +1,9 @@
 using ChecklistsManagement.Domain;
 using ChecklistsManagement.Repository;
 using ChecklistsManagement.Service;
+using ChecklistsManagement.Util;
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -22,6 +25,16 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IChecklistsService, ChecklistsService>();
 builder.Services.AddScoped<IChecklistsRepository, ChecklistsRepository>();
+
+builder.Services.Configure<MongoDbSettings>(
+    builder.Configuration.GetSection("MongoDB"));
+
+builder.Services.AddSingleton(sp =>
+{
+    var settings = sp.GetRequiredService<IOptions<MongoDbSettings>>().Value;
+    var client = new MongoClient(settings.ConnectionString);
+    return client.GetDatabase(settings.DatabaseName);
+});
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

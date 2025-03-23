@@ -31,13 +31,11 @@ namespace ChecklistsManagement.Service
 
         #region PUBLIC MEMBERS   
 
-        public List<ChecklistsDTO> GetChecklists()
+        public async Task<List<ChecklistsDTO>> GetChecklists()
         {
             _logger.LogInformation("ChecklistsService.GetChecklists called:");
-            
-            List<Checklists> checklists = _checklistsRepository.GetChecklists();
-
-            return _mapper.Map<List<ChecklistsDTO>>(checklists);
+          
+            return _mapper.Map<List<ChecklistsDTO>>(await _checklistsRepository.GetChecklists());
         }
 
         #endregion

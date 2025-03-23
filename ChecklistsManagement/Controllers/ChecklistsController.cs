@@ -1,6 +1,5 @@
 ﻿using ChecklistsManagement.DTO;
 using ChecklistsManagement.Service;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChecklistsManagement.API.Controllers
@@ -34,12 +33,10 @@ namespace ChecklistsManagement.API.Controllers
 
 
         [HttpGet(Name = "GetChecklists")]
-        public ActionResult<List<ChecklistsDTO>> GetChecklists()
+        public async Task<ActionResult<List<ChecklistsDTO>>> GetChecklists()
         {
             _logger.LogInformation("GetChecklists called:");
-
-            List<ChecklistsDTO> checklists = _checklistsService.GetChecklists();
-            return Ok(checklists);
+            return Ok(await _checklistsService.GetChecklists());
         }
 
         #endregion

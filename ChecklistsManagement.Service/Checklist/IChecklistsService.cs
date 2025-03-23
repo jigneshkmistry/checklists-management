@@ -9,6 +9,6 @@ namespace ChecklistsManagement.Service
 {
     public interface IChecklistsService
     {
-        List<ChecklistsDTO> GetChecklists();
+        Task<List<ChecklistsDTO>> GetChecklists();
     }
 }

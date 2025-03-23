@@ -1,10 +1,6 @@
 ﻿using ChecklistsManagement.Domain;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MongoDB.Driver;
 
 namespace ChecklistsManagement.Repository
 {
@@ -14,13 +10,16 @@ namespace ChecklistsManagement.Repository
         #region PRIVATE VARIABLE
         
         private readonly ILogger<ChecklistsRepository> _logger;
+        private readonly IMongoCollection<Checklists> _collection;
 
         #endregion
 
         #region CONSTRUCTOR
 
-        public ChecklistsRepository(ILogger<ChecklistsRepository> logger) 
+        public ChecklistsRepository(ILogger<ChecklistsRepository> logger,
+            IMongoDatabase database) 
         {
+            _collection = database.GetCollection<Checklists>("Checklists");
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -28,14 +27,10 @@ namespace ChecklistsManagement.Repository
 
         #region PUBLIC 
 
-        public List<Checklists> GetChecklists()
+        public async Task<List<Checklists>> GetChecklists()
         {
             _logger.LogInformation("ChecklistsRepository.GetChecklists called:");
-
-            return new List<Checklists>() {
-                new Checklists() { Description = "Desc 1", Title = "Daily Checklist", Id = "1" },
-                new Checklists() { Description = "Desc 2", Title = "Weekli Checklist", Id = "2" }
-            };
+            return await _collection.Find(_ => true).ToListAsync();
         }
 
         #endregion
