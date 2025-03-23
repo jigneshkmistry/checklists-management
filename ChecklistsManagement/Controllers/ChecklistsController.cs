@@ -13,15 +13,18 @@ namespace ChecklistsManagement.API.Controllers
         #region PRIVATE MEMBERS
 
         private readonly IChecklistsService _checklistsService;
+        private readonly ILogger<ChecklistsController> _logger;
 
         #endregion
 
 
         #region CONSTRUCTOR
 
-        public ChecklistsController(IChecklistsService checklistsService)
+        public ChecklistsController(ILogger<ChecklistsController> logger,
+            IChecklistsService checklistsService)
         {
             _checklistsService = checklistsService ?? throw new ArgumentNullException(nameof(checklistsService));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         #endregion
@@ -33,6 +36,8 @@ namespace ChecklistsManagement.API.Controllers
         [HttpGet(Name = "GetChecklists")]
         public ActionResult<List<ChecklistsDTO>> GetChecklists()
         {
+            _logger.LogInformation("GetChecklists called:");
+
             List<ChecklistsDTO> checklists = _checklistsService.GetChecklists();
             return Ok(checklists);
         }
