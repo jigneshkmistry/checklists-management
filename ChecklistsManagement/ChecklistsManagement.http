@@ -1,0 +1,6 @@
+@ChecklistsManagement_HostAddress = http://localhost:5090
+
+GET {{ChecklistsManagement_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
