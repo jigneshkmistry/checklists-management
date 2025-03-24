@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ChecklistsManagement.Domain;
 using ChecklistsManagement.DTO;
+using ChecklistsManagement.DTO.Checklists;
 
 namespace ChecklistsManagement.Service
 {
@@ -11,6 +12,13 @@ namespace ChecklistsManagement.Service
         public ChecklistsProfile()
         {
             CreateMap<Checklists, ChecklistsDTO>();
+            CreateMap<ChecklistsForCreationDTO, Checklists>();
+            CreateMap<ChecklistsForUpdateDTO, Checklists>();
+
+            CreateMap<ChecklistItem, ChecklistItemDTO>();
+            CreateMap<ChecklistItemCreationDTO, ChecklistItem>();
+
+            CreateMap<Checklists, ChecklistDetailsDTO>();  
         }
 
         #endregion

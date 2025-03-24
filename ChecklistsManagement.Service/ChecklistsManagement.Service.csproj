@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ChecklistsManagement.Domain\ChecklistsManagement.Domain.csproj" />
     <ProjectReference Include="..\ChecklistsManagement.DTO\ChecklistsManagement.DTO.csproj" />
+    <ProjectReference Include="..\ChecklistsManagement.Util\ChecklistsManagement.Util.csproj" />
   </ItemGroup>
 
 </Project>

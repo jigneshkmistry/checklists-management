@@ -1,10 +1,11 @@
 ﻿using ChecklistsManagement.Domain;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace ChecklistsManagement.Repository
 {
-    public class ChecklistsRepository : IChecklistsRepository
+    public class ChecklistsRepository : Repository<Checklists, ObjectId>, IChecklistsRepository
     {
 
         #region PRIVATE VARIABLE
@@ -17,7 +18,7 @@ namespace ChecklistsManagement.Repository
         #region CONSTRUCTOR
 
         public ChecklistsRepository(ILogger<ChecklistsRepository> logger,
-            IMongoDatabase database) 
+            IMongoDatabase database) : base(database, "Checklists")
         {
             _collection = database.GetCollection<Checklists>("Checklists");
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -32,6 +33,7 @@ namespace ChecklistsManagement.Repository
             _logger.LogInformation("ChecklistsRepository.GetChecklists called:");
             return await _collection.Find(_ => true).ToListAsync();
         }
+
 
         #endregion
 

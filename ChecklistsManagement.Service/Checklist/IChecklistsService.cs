@@ -1,14 +1,17 @@
-﻿using ChecklistsManagement.DTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ChecklistsManagement.Domain;
+using ChecklistsManagement.DTO;
+using ChecklistsManagement.DTO.Checklists;
+using MongoDB.Bson;
 
 namespace ChecklistsManagement.Service
 {
-    public interface IChecklistsService
+    public interface IChecklistsService : IServiceBase<Checklists, ObjectId>
     {
-        Task<List<ChecklistsDTO>> GetChecklists();
+        
+        Task PublishChecklistAsync(ObjectId id, bool publish);
+
+        Task<ChecklistItemDTO> AddChecklistItem(ObjectId id, ChecklistItemCreationDTO item);
+
+        Task DeleteChecklistItemAsync(ObjectId id, ObjectId itemId);
     }
 }

@@ -53,3 +53,4 @@ CodeCoverage/
 TestResult.xml
 nunit-*.xml
 /ChecklistsManagement/.vs/ChecklistsManagement
+/ChecklistsManagement/.vs/ProjectEvaluation

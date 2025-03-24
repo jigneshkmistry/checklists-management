@@ -1,41 +1,83 @@
 ﻿using AutoMapper;
 using ChecklistsManagement.Domain;
 using ChecklistsManagement.DTO;
+using ChecklistsManagement.DTO.Checklists;
+using ChecklistsManagement.Util;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
 
 namespace ChecklistsManagement.Service
 {
-    public class ChecklistsService : IChecklistsService
+    public class ChecklistsService : ServiceBase<Checklists, ObjectId>, IChecklistsService
     {
 
         #region PRIVATE MEMBERS
 
         private readonly IChecklistsRepository _checklistsRepository;
-        private readonly ILogger<ChecklistsService> _logger;
-        private readonly IMapper _mapper;
-
+     
         #endregion
 
         #region CONSTRUCTOR
 
         public ChecklistsService(ILogger<ChecklistsService> logger,
             IMapper mapper,
-            IChecklistsRepository checklistsRepository) 
+            IChecklistsRepository checklistsRepository) :
+            base(checklistsRepository, logger, mapper)
         {
             _checklistsRepository = checklistsRepository;
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         #endregion
 
         #region PUBLIC MEMBERS   
 
-        public async Task<List<ChecklistsDTO>> GetChecklists()
+        public async Task<ChecklistItemDTO> AddChecklistItem(ObjectId id,ChecklistItemCreationDTO item)
         {
-            _logger.LogInformation("ChecklistsService.GetChecklists called:");
-          
-            return _mapper.Map<List<ChecklistsDTO>>(await _checklistsRepository.GetChecklists());
+           
+            var checklist = await _checklistsRepository.GetByIdAsync(id);
+
+            if (checklist != null)
+            {
+                ChecklistItem entity = _mapper.Map<ChecklistItem>(item);
+                checklist.Items.Add(entity);
+                await _checklistsRepository.UpdateAsync(id, checklist);
+
+                return _mapper.Map<ChecklistItemDTO>(entity);
+            }
+            else
+            {
+                throw new CustomException(404, "Checklist with id not found");
+            }
+        }
+
+        public async Task DeleteChecklistItemAsync(ObjectId id, ObjectId itemId)
+        {
+            var checklist = await _checklistsRepository.GetByIdAsync(id);
+
+            if (checklist != null)
+            {
+                checklist.Items.RemoveAll(i => i.Id == itemId.ToString());
+                await _checklistsRepository.UpdateAsync(id, checklist);
+            }
+            else
+            {
+                throw new CustomException(404, "Checklist with id not found");
+            }
+        }
+
+        public async Task PublishChecklistAsync(ObjectId id, bool publish)
+        {
+            var checklist = await _checklistsRepository.GetByIdAsync(id);
+
+            if (checklist != null)
+            {
+                checklist.Status = publish ? ChecklistStatus.Published : ChecklistStatus.Unpublished;
+                await _checklistsRepository.UpdateAsync(id, checklist);
+            }
+            else
+            {
+                throw new CustomException(404, "Checklist with id not found");
+            }
         }
 
         #endregion

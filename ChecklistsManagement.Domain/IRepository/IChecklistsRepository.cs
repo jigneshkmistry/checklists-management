@@ -1,7 +1,9 @@
-﻿namespace ChecklistsManagement.Domain
+﻿using ChecklistsManagement.Domain.IRepository;
+using MongoDB.Bson;
+
+namespace ChecklistsManagement.Domain
 {
-    public interface IChecklistsRepository
+    public interface IChecklistsRepository : IRepository<Checklists, ObjectId>
     {
-        Task<List<Checklists>> GetChecklists();
     }
 }
