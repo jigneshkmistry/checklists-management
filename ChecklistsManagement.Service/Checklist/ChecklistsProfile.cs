@@ -17,8 +17,9 @@ namespace ChecklistsManagement.Service
 
             CreateMap<ChecklistItem, ChecklistItemDTO>();
             CreateMap<ChecklistItemCreationDTO, ChecklistItem>();
+            CreateMap<ChecklistItemForUpdateDTO, ChecklistItem>();
 
-            CreateMap<Checklists, ChecklistDetailsDTO>();  
+            CreateMap<Checklists, ChecklistDetailsDTO>();
         }
 
         #endregion

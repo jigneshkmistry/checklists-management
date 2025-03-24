@@ -12,6 +12,8 @@ namespace ChecklistsManagement.Service
 
         Task<ChecklistItemDTO> AddChecklistItem(ObjectId id, ChecklistItemCreationDTO item);
 
+        Task UpdateChecklitem(ObjectId id, ObjectId itemId, ChecklistItemForUpdateDTO checklistItemForUpdateDTO);
+
         Task DeleteChecklistItemAsync(ObjectId id, ObjectId itemId);
     }
 }

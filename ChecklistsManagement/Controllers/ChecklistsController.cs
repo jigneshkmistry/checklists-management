@@ -155,6 +155,34 @@ namespace ChecklistsManagement.API.Controllers
             return NoContent();
         }
 
+
+        /// <summary>
+        /// Update checklist item
+        /// </summary>
+        /// <param name="id">ChecklistId</param>
+        /// <param name="itemId">Item Id</param>
+        /// <param name="checklistItemForUpdateDTO">ChecklistItemUpdate Model</param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("{id}/items/{itemId}", Name = "UpdateChecklitem")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> UpdateChecklitem(string id, string itemId, ChecklistItemForUpdateDTO checklistItemForUpdateDTO)
+        {
+            _logger.LogInformation("UpdateChecklitem called with {checklistItemForUpdateDTO}:", JsonConvert.SerializeObject(checklistItemForUpdateDTO));
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            await _checklistsService.UpdateChecklitem(new ObjectId(id), new ObjectId(itemId), checklistItemForUpdateDTO);
+
+            return NoContent();
+        }
+
         #endregion
 
 

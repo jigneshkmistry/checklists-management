@@ -65,6 +65,29 @@ namespace ChecklistsManagement.Service
             }
         }
 
+        public async Task UpdateChecklitem(ObjectId id, ObjectId itemId, ChecklistItemForUpdateDTO checklistItemForUpdateDTO)
+        {
+            var checklist = await _checklistsRepository.GetByIdAsync(id);
+
+            if (checklist != null)
+            {
+                var checklistItem = checklist.Items.Find(i => i.Id == itemId.ToString());
+                if (checklistItem != null) 
+                {
+                    _mapper.Map(checklistItemForUpdateDTO, checklistItem);
+                }
+                else 
+                {
+                    throw new CustomException(404, $"Checklistitem with id {itemId} not found");
+                }
+                await _checklistsRepository.UpdateAsync(id, checklist);
+            }
+            else
+            {
+                throw new CustomException(404, $"Checklist with id {id} not found");
+            }
+        }
+
         public async Task PublishChecklistAsync(ObjectId id, bool publish)
         {
             var checklist = await _checklistsRepository.GetByIdAsync(id);

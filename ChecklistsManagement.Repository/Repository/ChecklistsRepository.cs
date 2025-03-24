@@ -28,13 +28,6 @@ namespace ChecklistsManagement.Repository
 
         #region PUBLIC 
 
-        public async Task<List<Checklists>> GetChecklists()
-        {
-            _logger.LogInformation("ChecklistsRepository.GetChecklists called:");
-            return await _collection.Find(_ => true).ToListAsync();
-        }
-
-
         #endregion
 
     }
