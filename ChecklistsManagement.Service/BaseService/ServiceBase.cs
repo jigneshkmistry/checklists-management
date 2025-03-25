@@ -1,14 +1,7 @@
 ﻿using AutoMapper;
-using ChecklistsManagement.Domain;
 using ChecklistsManagement.Domain.IRepository;
 using ChecklistsManagement.Util;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChecklistsManagement.Service
 {
@@ -82,7 +75,8 @@ namespace ChecklistsManagement.Service
 
             _mapper.Map(dto, entity);
 
-            //Add the Updated entity to the dbContext.
+            this.DoPostProcessing(entity);
+
             await _repository.UpdateAsync(id,entity);
         }
 
@@ -96,6 +90,11 @@ namespace ChecklistsManagement.Service
             }
 
             await _repository.DeleteAsync(id);
+        }
+
+        public virtual void DoPostProcessing(TEntity entity)
+        {
+            //DO NOTHING
         }
     }
 }

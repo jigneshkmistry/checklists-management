@@ -21,8 +21,7 @@ namespace ChecklistsManagement.Service
 
         public ChecklistsService(ILogger<ChecklistsService> logger,
             IMapper mapper,
-            IChecklistsRepository checklistsRepository) :
-            base(checklistsRepository, logger, mapper)
+            IChecklistsRepository checklistsRepository) : base(checklistsRepository, logger, mapper)
         {
             _checklistsRepository = checklistsRepository;
         }
@@ -80,6 +79,7 @@ namespace ChecklistsManagement.Service
                 {
                     throw new CustomException(404, $"Checklistitem with id {itemId} not found");
                 }
+                checklist.UpdatedAt = DateTime.Now;
                 await _checklistsRepository.UpdateAsync(id, checklist);
             }
             else
@@ -95,6 +95,7 @@ namespace ChecklistsManagement.Service
             if (checklist != null)
             {
                 checklist.Status = publish ? ChecklistStatus.Published : ChecklistStatus.Unpublished;
+                checklist.UpdatedAt = DateTime.Now;
                 await _checklistsRepository.UpdateAsync(id, checklist);
             }
             else
@@ -107,6 +108,10 @@ namespace ChecklistsManagement.Service
 
         #region VIRTUAL METHODS
 
+        public override void DoPostProcessing(Checklists entity)
+        {
+            entity.UpdatedAt = DateTime.Now;
+        }
 
         #endregion
 
