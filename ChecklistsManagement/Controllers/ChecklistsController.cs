@@ -10,7 +10,7 @@ namespace ChecklistsManagement.API.Controllers
     /// <summary>
     /// Checklist Endpoint
     /// </summary>
-    [Route("api/[controller]")]
+    [Route("api/checklists")]
     [ApiController]
     public class ChecklistsController : ControllerBase
     {
@@ -52,11 +52,11 @@ namespace ChecklistsManagement.API.Controllers
         [HttpGet(Name = "GetChecklists")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<List<ChecklistsDTO>>> GetChecklists([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        public async Task<ActionResult<List<ChecklistDetailsDTO>>> GetChecklists([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
             _logger.LogInformation("GetChecklists called with Page No : {page} and Page Size : {pageSize}", page, pageSize);
 
-            return Ok(await _checklistsService.GetPagedDataAsync<ChecklistsDTO>(page, pageSize));
+            return Ok(await _checklistsService.GetPagedDataAsync<ChecklistDetailsDTO>(page, pageSize));
         }
 
         /// <summary>
